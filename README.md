@@ -1,3 +1,5 @@
+![header](assets/header.png)
+
 # Section 1: Active inference on Xanadu
 
 _by Pierre-Luc Dallaire-Demers and Simon Szalai_
@@ -120,6 +122,7 @@ To study the behavior of the agents when given access to samples from computatio
 
 ![borealis](assets/borealis.webp)
 _Figure 2: The Borealis device [6] can generate samples from a computationally intractable distribution._
+
 Theoretically, one could wire in the gaussian boson samplers through Pennylane and use them as a parametrized source of intractable samples for the neural networks of the active inference agents. In the interest of time, we simply recorded a large number of samples from the X8 device and used those as input to an extended version of the habitual network used in the deep active inference framework.
 
 How do we compare the performance of the quantum and classical agents?
@@ -240,3 +243,6 @@ After running the task on the Nairobi machine on IBM, we see the histogram of th
 ![nairobi_results](assets/nairobi_results.png)
 
 ## References
+
+[1] Hodson, M., Ruck, B., Ong, H., Garvin, D., and Dulman, S., Portfolio rebalancing experiments using the Quantum Alternating Operator Ansatz, arXiv:1911.05296
+[2] https://www.zorc-finance.com/post/optimal-portfolios-with-qaoa
