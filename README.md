@@ -194,7 +194,7 @@ Quantum noise was retrieved though Xanadu Cloud using `strawberry_fields`. There
 
    _blue: quantum, yellow: classical_
 
-   ![results_2](assets/classical-vs-classical.gif)
+   ![results_2](assets/classical-vs-quantum.gif)
 
    In this scenario, the only difference from the above case is that the quantum agent (the blue one on the left), has some quantum noise obtained from Xanadu's X8 device injected as additional input of its habitual network. In the classical agents, the noise is replaced with zeros. As visible on the video, the agent performs slightly worse than the classical counterpart, as expected. The reason for this is that the classical agent wasn't trained against the quantum agent, so it is not in a disadvantage of predicting it's opponent's behavior. On the other hand, the quantum agent has extra noise added, so it can hit the ball even less accurately.
    Also, since the quantum layer was not trainable, and it didn't have feedback during training, the added quantum noise degraded the agent's performance. If the quantum sampler would be trainable as well (through PennyLane), it could add such a noise that still makes it unpredictable for the opponent, but does not degrade its performance.
