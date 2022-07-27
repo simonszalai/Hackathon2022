@@ -191,6 +191,7 @@ Quantum noise was retrieved though Xanadu Cloud using `strawberry_fields`. There
    In this scenario, two identical classical agent play against each other. They have the same network architecture and the same weights. The weights were obtained by training them against the baseline RNN policy, as described below. Both of them use the habitual network for faster action selection (when the habitual network is confident enough), and also they use the haitual network to bias the MCTS process towards actions that are more likely to be selected by the habitual network. As it is visible on the video below, the agents mostly struggle to hit the ball, this is due to the lack of hyperparameter tuning (time constraints of the Hackathon), and selection of hyperparameters that prioritize speed instead of accuracy (training on a laptop CPU).
 
 2. **Classical vs. quantum - trained against baseline**
+
    _blue: quantum, yellow: classical_
 
    ![results_2](assets/classical-vs-classical.gif)
@@ -223,10 +224,15 @@ Quantum noise was retrieved though Xanadu Cloud using `strawberry_fields`. There
 ## References
 
 [1] Fountas, Z., Sajid, N., Mediano, P. A. M, and Friston, K., Deep active inference agents using Monte-Carlo methods,arXiv:2006.04176 https://github.com/zfountas/deep-active-inference-mc (2020).
+
 [2] Da Costa, L., Lanillos, P., Sajid, N.;,Friston, K., and Khan, S. How Active Inference Could Help Revolutionize Robotics. Entropy, 24, 361(2022).
+
 [3] Parr, T., Pezzulo, G. and Friston, K. J., Active Inference: The Free Energy Principle in Mind, Brain, and Behavior, MIT Press (2022).
+
 [4] Cepelewicz, J., To Make Sense of the Present, Brains May Predict the Future, Quanta Magazine, July (2018).
+
 [5] Ha, D., Slime Volleyball Gym Environment, https://github.com/hardmaru/slimevolleygym (2020).
+
 [6] Madsen, L.S., Laudenbach, F., Askarani, M.F. et al. Quantum computational advantage with a programmable photonic processor. Nature 606, 75–81 (2022).
 
 # Section 2 (IBM Challenge) Portfolio optimization on IBM Nairobi
@@ -251,4 +257,5 @@ After running the task on the Nairobi machine on IBM, we see the histogram of th
 ## References
 
 [1] Hodson, M., Ruck, B., Ong, H., Garvin, D., and Dulman, S., Portfolio rebalancing experiments using the Quantum Alternating Operator Ansatz, arXiv:1911.05296
+
 [2] https://www.zorc-finance.com/post/optimal-portfolios-with-qaoa
