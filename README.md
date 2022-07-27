@@ -152,16 +152,19 @@ Within the active inference framework, 3 neural networks were trained. A brief s
 #### Habitual Network
 
 **Purpose**: The main purpose of the habitual network is to increase the efficiency of MCTS (Monte Carlo Tree Search). It can be compared to habit forming of biological agents, where habits reduce the computational burden in frequently encountered situations. It takes a state as an input, and returns a probabilty distibution over actions as an output. This probability distribution is used in two ways within the active inference framework. First, if one of the actions has much higher probability than the rest, it is just selected, then the whole MCTS process can be skipped. Second, if this is not the case, it is used to bias the MCTS process by adding extra probability for those actions that were frequently selected according to the habitual network.
+
 **Training**: The habitual network was trained to mimic the actions taken by the baseline policy provided by the `slimevolleygym` environment. This baseline policy is a tiny, 120-parameter Recurrent Neural Network (RNN). During training, besides the agent, a 'shadow' agent, an instance of the baseline policy was set up, which also predicted an action for the same observation as the agent. This predicted probability distribution over actions was passed to the habitual network, where the loss was defined as the Kullback-Leibler Divergence between this, passed distribution and the one predicted by the habitual network.
 
 #### Transition Network
 
-**Purpose**: The transition network is a variational autoencoder that takes a state and an action as its input, and predicts what the next state should be. This represents the agent's internal model, which can be thought of as the agent's understanding of the dynamics of the environment where it lives. With another words: if the agent is in a particular state and takes a specific action, what happens next? How will the envrionment react?
+**Purpose**: The transition network is a variational autoencoder that takes a state and an action as its input, and predicts what the next state should be. This represents the agent's internal model, which can be thought of as the agent's understanding of the dynamics of the environment where it lives. With another words: if the agent is in a particular state and takes a specific action, what happens next? How will the environment react?
+
 **Training**: During training, in each state the agents predict what the next state will be, given that a particular action is taken. After that, the same action is applied to the environment, which returns the next state, the actual result of that action. The loss is defined as the Kullback-Leibler Divergence between the predicted next state and the actual next state. The agent will strive to minimize the difference (surprise), effectively learning the dynamics of the environment.
 
 #### Encoder Network
 
 **Purpose**: The encoder network is also a variational autoencoder, which has the task of encoding a high-dimensional observation to a low-dimensional latent space. In our experiments we directly accessed the state of the environment, which is a 12-dimensional vector, so in this particular case the encoder network was not particularly useful. In other use cases, for example where the observations that the agent receives are raw pixels, the encoder network (for example by using a few convolutional layers) can transform these observations to tractable latent states.
+
 **Training**: During training, an observation is passed to the encoder network. First the network encodes the observation to a latent state, then it decodes it back to a predicted observation. The binary cross-entropy between the actual and predicted observations will be the first term of the loss. The second term will be the Kullback-Leibler Divergence between the encoded state and the state predicted by the transition network.
 
 ### Monte Carlo Tree Search
@@ -169,8 +172,10 @@ Within the active inference framework, 3 neural networks were trained. A brief s
 Monte Carlo Tree Search is a technique to select the action that yields the lowest free energy, considering the foreseeable future. The way it works if the following:
 
 - **Phase A**: This phase is just a performance optimization. The habitual network predicts a probabilty distribution over actions, and if one of the actions are much more likely than all the others, that action is selected and the rest of the MCTS process is skipped.
+
 - **Phase B**: This is the main MCTS loop. It is executed many times (few hundreds), until one of the actions reach a probability that exceeds the threshold. In each iteration, first the most traversed path is traversed again, down to the last (leaf) node. Here Expected Free Energy is calculated for every action and stored in the node. After that, the node is expanded: a new child node is added for each possible action. These children nodes are initialized with states predicted by the transition network, using the state of their parent nodes and the action that leads to them as inputs. After that, an MCTS simulation is launched from the leaf node (the same node that got expanded): alternating the transition and habitual networks to a pre-configured depth, a likely path into the future is generated. Finally, the Expected Free Energy of this path is calculated, which is backpropagated to all the nodes in the chain that lead to the current leaf node.
   This loop is repeated until an action reaches the threshold: then the action with the lowest Expected Free Energy is selected. If none if them does until the repetition limit is reached, MCTS moves to the final phase, C.
+
 - **Phase C**: Since no action is an obvious winner, but one still has to be selected, the final action is choosen the same way as if one would reach the threshold in Phase B: the starting action of the path that results in the lowest total Expected Free Energy.
 
 ### Quantum Noise
@@ -183,13 +188,14 @@ Quantum noise was retrieved though Xanadu Cloud using `strawberry_fields`. There
 
    ![results_1](assets/classical-vs-classical.gif)
 
-   In this scanario, two identical classical agent play against each other. They have the same network architecture and the same weights. The weights were obtained by training them against the baseline RNN policy, as described below. Both of them use the habitual network for faster action selection (when the habitual network is confident enough), and also they use the haitual network to bias the MCTS process towards actions that are more likely to be selected by the habitual network. As it is visible on the video below, the agents mostly struggle to hit the ball, this is due to the lack of hyperparameter tuning (time constraints of the Hackathon), and selection of hyperparameters that prioritize speed instead of accuracy (training on a laptop CPU).
+   In this scenario, two identical classical agent play against each other. They have the same network architecture and the same weights. The weights were obtained by training them against the baseline RNN policy, as described below. Both of them use the habitual network for faster action selection (when the habitual network is confident enough), and also they use the haitual network to bias the MCTS process towards actions that are more likely to be selected by the habitual network. As it is visible on the video below, the agents mostly struggle to hit the ball, this is due to the lack of hyperparameter tuning (time constraints of the Hackathon), and selection of hyperparameters that prioritize speed instead of accuracy (training on a laptop CPU).
 
 2. **Classical vs. quantum - trained against baseline**
+   _blue: quantum, yellow: classical_
 
    ![results_2](assets/classical-vs-classical.gif)
 
-   In this scanario, the only difference from the above case is that the quantum agent (the blue one on the left), has some quantum noise obtained from Xanadu's X8 device injected as additional input of its habitual network. In the classical agents, the noise is replaced with zeros. As visible on the video, the agent performs slightly worse than the classical counterpart, as expected. The reason for this is that the classical agent wasn't trained against the quantum agent, so it is not in a disadvantage of predicting it's opponent's behavior. On the other hand, the quantum agent has extra noise added, so it can hit the ball even less accurately.
+   In this scenario, the only difference from the above case is that the quantum agent (the blue one on the left), has some quantum noise obtained from Xanadu's X8 device injected as additional input of its habitual network. In the classical agents, the noise is replaced with zeros. As visible on the video, the agent performs slightly worse than the classical counterpart, as expected. The reason for this is that the classical agent wasn't trained against the quantum agent, so it is not in a disadvantage of predicting it's opponent's behavior. On the other hand, the quantum agent has extra noise added, so it can hit the ball even less accurately.
    Also, since the quantum layer was not trainable, and it didn't have feedback during training, the added quantum noise degraded the agent's performance. If the quantum sampler would be trainable as well (through PennyLane), it could add such a noise that still makes it unpredictable for the opponent, but does not degrade its performance.
 
 3. **Classical vs. quantum - trained against each other**
