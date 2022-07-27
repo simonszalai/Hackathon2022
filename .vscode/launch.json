@@ -1,0 +1,28 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Inference",
+      "type": "python",
+      "request": "launch",
+      "program": "src/run/run.py",
+      "console": "integratedTerminal",
+      "args": ["-n", "training_files/mimic-baseline/saved_models/epoch_325"],
+      "justMyCode": true,
+      "python": "/Users/simon/dev/quantum-dueling-slimes/.venv/bin/python"
+    },
+    {
+      "name": "Python: Training",
+      "type": "python",
+      "request": "launch",
+      "program": "src/train/train.py",
+      "console": "integratedTerminal",
+      "args": ["-p", "test"],
+      "justMyCode": true,
+      "python": "/Users/simon/dev/quantum-dueling-slimes/.venv/bin/python"
+    }
+  ]
+}
