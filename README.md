@@ -2,7 +2,7 @@
 
 # Section 1: Active inference on Xanadu
 
-_by Pierre-Luc Dallaire-Demers and Simon Szalai_
+_by Simon Szalai and Pierre-Luc Dallaire-Demers_
 
 Given many recent demonstrations of quantum computational advantage, we seek to evaluate if this resource can be transformed into quantum application advantage. More specifically, we consider the case of a potential advantage in multiplayer environments, where different sources and models of quantum advantage can be compared systematically.
 
